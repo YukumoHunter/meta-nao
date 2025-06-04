@@ -35,6 +35,69 @@ UseMTU=yes
 RouteMetric=10
 ClientIdentifier=mac
 """
+DEFAULT_TEAM_TOML = """\
+team_number = 8
+
+[[naos]]
+hostname = "sam"
+number = 20
+body_id = "P0000073A03S84F00018"
+head_id = "P0000074A03S84F00015"
+
+[[naos]]
+hostname = "moos"
+number = 21
+body_id = "P0000073A03S83I00012"
+head_id = "P0000074A03S83I00027"
+
+[[naos]]
+hostname = "phineas"
+number = 22
+body_id = "P0000073B00S8C700011"
+head_id = "P0000074A04S8C700011"
+
+[[naos]]
+hostname = "ferb"
+number = 23
+body_id = "P0000073A06S91300024"
+head_id = "P0000074A04S91300023"
+
+[[naos]]
+hostname = "momo"
+number = 24
+body_id = "P0000073A09S98900028"
+head_id = "P0000074A05S98900017"
+
+[[naos]]
+hostname = "appa"
+number = 25
+body_id = "P0000073A10S9BH00033"
+head_id = "P0000074A06S9BH00015"
+
+[[naos]]
+hostname = "daphne"
+number = 26
+body_id = "P0000073A19S31C00026"
+head_id = "P0000074A09S31C00026"
+
+[[naos]]
+hostname = "perry"
+number = 27
+body_id = "P0000073A06S8CP00020"
+head_id = "P0000074A02S81F00020"
+
+[[naos]]
+hostname = "barbie"
+number = 28
+body_id = "P0000073A20S42L00016"
+head_id = "P0000074A10S42L00016"
+
+[[naos]]
+hostname = "ken"
+number = 29
+body_id = "P0000073A20S42L00015"
+head_id = "P0000074A10S42L00015"
+"""
 
 
 def load_configuration(path: Path | str) -> dict[str, Any]:
@@ -48,6 +111,10 @@ def load_configuration(path: Path | str) -> dict[str, Any]:
 
     """
     path = Path(path)
+
+    if not path.exists():
+        return tomllib.loads(DEFAULT_TEAM_TOML)
+
     with path.open("rb") as file:
         return tomllib.load(file)
 
@@ -79,9 +146,7 @@ def find_nao_with_head_id(
 
     """
     try:
-        return next(
-            x for x in configuration["naos"] if x["head_id"] == head_id
-        )
+        return next(x for x in configuration["naos"] if x["head_id"] == head_id)
     except StopIteration as error:
         msg = f"Could not find NAO with head_id {head_id}"
         raise ValueError(msg) from error

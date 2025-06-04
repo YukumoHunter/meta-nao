@@ -1,7 +1,7 @@
 header:
   version: 14
 
-distro: HULKs-OS
+distro: HULKs-DNT-OS
 local_conf_header:
   meta-hulks: |
     SDK_TOOLCHAIN_LANGS ?= "rust"

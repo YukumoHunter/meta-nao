@@ -17,9 +17,9 @@ jobs:
           path: meta-nao
       - name: Append commit hash to development versions
         if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
-        run: sed -i 's/\(DISTRO_VERSION = "[^"]*\)/\1-${{ github.sha }}/' meta-nao/meta-hulks/conf/distro/HULKs-OS.conf
+        run: sed -i 's/\(DISTRO_VERSION = "[^"]*\)/\1-${{ github.sha }}/' meta-nao/meta-hulks/conf/distro/HULKs-DNT-OS.conf
       - name: Extract the version
-        run: echo "version=$(grep -P 'DISTRO_VERSION\s*=\s*".+"' meta-nao/meta-hulks/conf/distro/HULKs-OS.conf | cut -d\" -f2)" >> $GITHUB_ENV
+        run: echo "version=$(grep -P 'DISTRO_VERSION\s*=\s*".+"' meta-nao/meta-hulks/conf/distro/HULKs-DNT-OS.conf | cut -d\" -f2)" >> $GITHUB_ENV
       - name: Checkout Yocto layers
         run: kas checkout meta-nao/kas/base.yml:meta-nao/kas/hulks.yml
       - name: Populate aldebaran_binaries.tar.gz
@@ -30,21 +30,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: image
-          path: build/tmp/deploy/images/nao-v6/nao-image-HULKs-OS-${{ env.version }}.ext3.gz.opn
+          path: build/tmp/deploy/images/nao-v6/nao-image-HULKs-DNT-OS-${{ env.version }}.ext3.gz.opn
       - name: Build SDK (x86_64)
         run: kas build --target nao-image --cmd populate_sdk meta-nao/kas/base.yml:meta-nao/kas/hulks.yml
       - name: Upload x86_64 SDK artifact
         uses: actions/upload-artifact@v4
         with:
           name: sdk-x86_64
-          path: build/tmp/deploy/sdk/HULKs-OS-x86_64-toolchain-${{ env.version }}.sh
+          path: build/tmp/deploy/sdk/HULKs-DNT-OS-x86_64-toolchain-${{ env.version }}.sh
       - name: Build SDK (aarch64)
         run: kas build --target nao-image --cmd populate_sdk meta-nao/kas/base.yml:meta-nao/kas/hulks.yml:meta-nao/kas/aarch64.yml
       - name: Upload aarch64 SDK artifact
         uses: actions/upload-artifact@v4
         with:
           name: sdk-aarch64
-          path: build/tmp/deploy/sdk/HULKs-OS-aarch64-toolchain-${{ env.version }}.sh
+          path: build/tmp/deploy/sdk/HULKs-DNT-OS-aarch64-toolchain-${{ env.version }}.sh
 
   release:
     name: Release
@@ -87,10 +87,10 @@ jobs:
       - name: Release NAO image and SDK
         uses: softprops/action-gh-release@v2
         with:
-          name: HULKs-OS ${{ github.ref_name }}
-          body: Flashable image containing HULKs-OS ${{ github.ref_name }} and the corresponding SDK with the toolchain and other tools targeting HULKs-OS, for instructions see https://hulks.de/hulk/setup/overview/
+          name: HULKs-DNT-OS ${{ github.ref_name }}
+          body: Flashable image containing HULKs-DNT-OS ${{ github.ref_name }} and the corresponding SDK with the toolchain and other tools targeting HULKs-DNT-OS, for instructions see https://hulks.de/hulk/setup/overview/
           files: |
-            nao-image-HULKs-OS-${{ github.ref_name }}.ext3.gz.opn
-            HULKs-OS-x86_64-toolchain-${{ github.ref_name }}.sh
-            HULKs-OS-aarch64-toolchain-${{ github.ref_name }}.sh
+            nao-image-HULKs-DNT-OS-${{ github.ref_name }}.ext3.gz.opn
+            HULKs-DNT-OS-x86_64-toolchain-${{ github.ref_name }}.sh
+            HULKs-DNT-OS-aarch64-toolchain-${{ github.ref_name }}.sh
           fail_on_unmatched_files: true
