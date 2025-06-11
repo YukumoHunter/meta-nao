@@ -10,6 +10,7 @@ SRC_URI = "\
            file://configure_network \
            file://network-config.service \
            file://SPL_HULKs.psk \
+           file://DNT_5G.psk \
            file://fallback_notification.wav \
            file://network-fallback-notification.service \
           "
